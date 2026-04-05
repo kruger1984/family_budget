@@ -1,0 +1,58 @@
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: fb_app
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - mysql
+        networks:
+            - fb_network
+
+    mysql:
+        image: mysql:8.0
+        container_name: fb_mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: fb_mysql_root
+            MYSQL_DATABASE: fb_mysql
+            MYSQL_USER: fb_mysql
+            MYSQL_PASSWORD: fb_mysql
+        ports:
+            - "3306:3306"
+        networks:
+            - fb_network
+
+    mysql_test:
+        image: mysql:8.0
+        container_name: fb_mysql_test
+        restart: unless-stopped
+        environment:
+          MYSQL_ROOT_PASSWORD: fb_mysql_root
+          MYSQL_DATABASE: fb_mysql_test
+          MYSQL_USER: fb_mysql
+          MYSQL_PASSWORD: fb_mysql
+        ports:
+            - "3307:3306"
+        networks:
+            - fb_network
+
+    nginx:
+        image: nginx:alpine
+        container_name: laravel_nginx
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - app
+        networks:
+            - fb_network
+
+networks:
+    fb_network:
+        driver: bridge

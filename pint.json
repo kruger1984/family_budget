@@ -1,0 +1,40 @@
+{
+    "preset": "laravel",
+    "notPath": [
+        "tests/TestCase.php",
+        "tmp"
+    ],
+    "rules": {
+        "array_push": true,
+        "backtick_to_shell_exec": true,
+        "date_time_immutable": true,
+        "declare_strict_types": true,
+        "declare_parentheses": true,
+        "global_namespace_import": {
+            "import_classes": true,
+            "import_constants": true,
+            "import_functions": true
+        },
+        "mb_str_functions": true,
+        "modernize_types_casting": true,
+        "no_superfluous_elseif": true,
+        "no_useless_else": true,
+        "strict_comparison": true,
+        "self_accessor": true,
+        "self_static_accessor": true,
+        "ordered_class_elements": {
+            "order": [
+                "use_trait",
+                "case",
+                "constant",
+                "property_public",
+                "property_protected",
+                "property_private",
+                "construct",
+                "method_public",
+                "method_protected",
+                "method_private"
+            ]
+        }
+    }
+}

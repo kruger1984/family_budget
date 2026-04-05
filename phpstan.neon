@@ -1,0 +1,19 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app/
+        - database/
+        - routes/
+
+    # Уровень 5 - идеально для старта.
+    # Когда проект подрастет, сможешь поднять до 7.
+    level: 5
+
+    # Игнорируем некоторые специфические ошибки Laravel,
+    # которые Larastan иногда неверно интерпретирует
+    ignoreErrors:
+        # - '#Property .* does not exist on Illuminate\\Database\\Eloquent\\Model#'
+
+
