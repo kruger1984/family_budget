@@ -3,6 +3,8 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+        environment:
+          - XDEBUG_MODE=off
         container_name: fb_app
         working_dir: /var/www
         volumes:
