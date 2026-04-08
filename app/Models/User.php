@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Role;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Database\Factories\UserFactory;
-use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -41,6 +44,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|User whereRememberToken($value)
  * @method static Builder<static>|User whereUpdatedAt($value)
  * @mixin Eloquent
+ * @property string|null $avatar
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
+ * @property-read int|null $accounts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Family> $families
+ * @property-read int|null $families_count
+ * @method static Builder<static>|User whereAvatar($value)
+ * @mixin \Eloquent
  */
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -58,16 +68,24 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
+    }
+
+    public function families(): BelongsToMany
+    {
+        return $this->belongsToMany(Family::class)->withPivot('role')->withTimestamps()->withCasts([
+            'role' => Role::class,
+        ]);
+    }
+
+    public function accounts(): HasMany
+    {
+        return $this->hasMany(Account::class);
     }
 }
