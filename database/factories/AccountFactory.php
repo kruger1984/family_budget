@@ -12,15 +12,13 @@ class AccountFactory extends Factory
 {
     public function definition(): array
     {
-        $currency = fake()->randomElement(Currency::cases());
-
         return [
             'name' => fake()->word() . ' Account',
             'user_id'   => User::factory(),
             'family_id' => null,
             'type' => fake()->randomElement(AccountType::cases()),
-            'currency' => $currency,
-            'balance' => Money::make(0, $currency),
+            'currency' => fake()->randomElement(Currency::cases()),
+            'balance'   => fn (array $attributes) => Money::make(0, $attributes['currency']),
         ];
     }
 }
