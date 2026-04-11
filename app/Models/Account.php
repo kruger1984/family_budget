@@ -5,7 +5,10 @@ namespace App\Models;
 use App\Casts\MoneyCast;
 use App\Enums\AccountType;
 use App\Enums\Currency;
+use App\Support\ValueObjects\Money;
 use Database\Factories\AccountFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,14 +16,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @property AccountType $type
  * @property Currency $currency
- * @property \App\Support\ValueObjects\Money $balance
- * @property-read \App\Models\Family|null $family
- * @property-read \App\Models\User|null $user
- * @method static \Database\Factories\AccountFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Account query()
- * @mixin \Eloquent
+ * @property Money $balance
+ * @property-read Family|null $family
+ * @property-read User|null $user
+ * @method static AccountFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Account newModelQuery()
+ * @method static Builder<static>|Account newQuery()
+ * @method static Builder<static>|Account query()
+ * @mixin Eloquent
  */
 class Account extends Model
 {

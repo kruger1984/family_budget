@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\CategoryType;
+use App\Enums\TransactionType;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,8 +19,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'type' => $this->faker->randomElement(CategoryType::cases()),
+            'name' => $this->faker->word(),
             'icon' => $this->faker->imageUrl(width: 150, height: 150),
             'color' => $this->faker->hexColor(),
             'parent_id' => null,

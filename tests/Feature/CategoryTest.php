@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\CategoryType;
+use App\Enums\TransactionType;
 use App\Exceptions\CategoryChildTypeException;
 use App\Models\Category;
 use App\Models\Family;
@@ -38,7 +38,6 @@ class CategoryTest extends TestCase
         // Arrange
         $parent = Category::factory()->create([
             'name' => 'Transport',
-            'type' => CategoryType::Income
 
         ]);
 
@@ -46,7 +45,6 @@ class CategoryTest extends TestCase
         $child = Category::factory()->create([
             'name'      => 'Fuel',
             'parent_id' => $parent->id,
-            'type' => CategoryType::Income
         ]);
 
         // Assert
@@ -63,30 +61,12 @@ class CategoryTest extends TestCase
         $child = Category::factory()->create([
             'name'      => 'Fuel',
             'parent_id' => $parent->id,
-            'type'      => $parent->type
         ]);
         $parent->delete();
 
         // Assert
         $this->assertDatabaseMissing('categories', [
             'id' => $child->id,
-        ]);
-    }
-
-    public function test_child_must_have_same_type_as_parent(): void
-    {
-        // Arrange: Создаем родителя-Расход
-        $parent = Category::factory()->create([
-            'type' => CategoryType::Expense
-        ]);
-
-        // Assert & Act: Ожидаем ошибку при попытке создать ребенка-Доход
-        $this->expectException(CategoryChildTypeException::class);
-        $this->expectExceptionMessage('Child category must have the same type as parent.');
-
-        Category::factory()->create([
-            'parent_id' => $parent->id,
-            'type'      => CategoryType::Income // Пытаемся подсунуть другой тип
         ]);
     }
 }

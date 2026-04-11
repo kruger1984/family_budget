@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use App\Enums\CategoryType;
+use App\Enums\TransactionType;
 use App\Exceptions\CategoryChildTypeException;
 use App\Exceptions\CategoryNestingException;
 use Database\Factories\CategoryFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,16 +16,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use InvalidArgumentException;
 
 /**
- * @property CategoryType $type
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Category> $children
+ * @property TransactionType $type
+ * @property-read Collection<int, Category> $children
  * @property-read int|null $children_count
- * @property-read \App\Models\Family|null $family
+ * @property-read Family|null $family
  * @property-read Category|null $parent
- * @method static \Database\Factories\CategoryFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Category newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Category newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Category query()
- * @mixin \Eloquent
+ * @method static CategoryFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Category newModelQuery()
+ * @method static Builder<static>|Category newQuery()
+ * @method static Builder<static>|Category query()
+ * @mixin Eloquent
  */
 class Category extends Model
 {
@@ -31,19 +34,12 @@ class Category extends Model
 
     protected $fillable = [
         'name',
-        'type',
         'icon',
         'color',
         'parent_id',
         'family_id',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'type' => CategoryType::class,
-        ];
-    }
 
     protected static function booted(): void
     {
@@ -56,9 +52,6 @@ class Category extends Model
                 $parent = $category->parent;
 
                 if ($parent) {
-                    if ($parent->type !== $category->type) {
-                        throw new CategoryChildTypeException('Child category must have the same type as parent.');
-                    }
 
                     if ($parent->parent_id !== null) {
                         throw new CategoryNestingException('The selected parent is already a subcategory.');
