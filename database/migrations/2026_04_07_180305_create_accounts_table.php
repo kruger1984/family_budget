@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('family_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('type')->default(AccountType::Cash);
-            $table->string('currency', 3)->default(Currency::USD);
+            $table->string('currency', 3)->default(Currency::UAH);
             $table->integer('balance')->default(0);
             $table->timestamps();
         });
