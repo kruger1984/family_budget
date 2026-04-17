@@ -18,9 +18,9 @@ docker compose exec app composer install
 docker compose exec app bun install
 ```
 
-### Run database migrations
+### Run database migrations and setup
 ```bash
-docker compose exec app php artisan migrate
+docker compose exec app php artisan budget:install
 ```
 
 ### Stop the environment
@@ -87,11 +87,13 @@ bun run dev
 
 ## 📋 Useful Commands (Cheat Sheet)
 
-| Task                     | Command                            |
-|:-------------------------|:-----------------------------------|
-| **Shell Access**         | `docker compose exec app bash`     |
-| **Run Tests (TDD)**      | `php artisan test`                 |
-| **Fix Code Style**       | `vendor/bin/pint`                  |
-| **Static Analysis**      | `vendor/bin/phpstan analyse`       |
-| **Fresh Database**       | `php artisan migrate:fresh --seed` |
-| **run rector/pint/stan** | `composer lint`                    |
+| Task                           | Command                            |
+|:-------------------------------|:-----------------------------------|
+| **Shell Access**               | `docker compose exec app bash`     |
+| **Run Tests (TDD)**            | `php artisan test`                 |
+| **Fix Code Style**             | `vendor/bin/pint`                  |
+| **Static Analysis**            | `vendor/bin/phpstan analyse`       |
+| **Fresh Database**             | `php artisan migrate:fresh --seed` |
+| **run rector/pint/stan**       | `composer lint`                    |
+| **make migrations and setup**  | `php artisan budget:install`       |
+| **refresh db for development** | `php artisan budget:refresh`       |

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,6 +52,9 @@ use Illuminate\Support\Carbon;
  * @property-read Collection<int, Family> $families
  * @property-read int|null $families_count
  * @method static Builder<static>|User whereAvatar($value)
+ * @mixin Eloquent
+ * @mixin Model
+ * @mixin Model
  * @mixin \Eloquent
  */
 #[Fillable(['name', 'email', 'password'])]
@@ -60,23 +64,14 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-
     protected $fillable = [
         'name',
         'email',
         'avatar',
         'password',
         'remember_token',
+        'email_verified_at',
     ];
-
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
-        ];
-    }
 
     public function families(): BelongsToMany
     {
@@ -88,5 +83,13 @@ class User extends Authenticatable
     public function accounts(): HasMany
     {
         return $this->hasMany(Account::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }

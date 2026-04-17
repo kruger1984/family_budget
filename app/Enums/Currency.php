@@ -12,7 +12,7 @@ enum Currency: string
 
     public function symbol(): string
     {
-        return match($this) {
+        return match ($this) {
             self::UAH => '₴',
             self::USD => '$',
             self::EUR => '€',

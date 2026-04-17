@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Observers;
 
 use App\Enums\TransactionType;
@@ -39,7 +41,7 @@ class TransactionObserver
         match ($transaction->type) {
             TransactionType::Income => $this->updateBalance($account, $transaction->amount->raw()),
             TransactionType::Expense => $this->updateBalance($account, -$transaction->amount->raw()),
-            TransactionType::Transfer => (function () use ($transaction, $account) {
+            TransactionType::Transfer => (function () use ($transaction, $account): void {
                 $this->updateBalance($account, -$transaction->amount->raw());
                 $this->updateBalance($transaction->targetAccount, $transaction->target_amount->raw());
             })(),
@@ -53,7 +55,7 @@ class TransactionObserver
         match ($transaction->type) {
             TransactionType::Income => $this->updateBalance($account, -$transaction->amount->raw()),
             TransactionType::Expense => $this->updateBalance($account, $transaction->amount->raw()),
-            TransactionType::Transfer => (function () use ($transaction, $account) {
+            TransactionType::Transfer => (function () use ($transaction, $account): void {
                 $this->updateBalance($account, $transaction->amount->raw()); // ПЛЮС
                 $this->updateBalance($transaction->targetAccount, -$transaction->target_amount->raw()); // МИНУС
             })(),
@@ -62,11 +64,11 @@ class TransactionObserver
 
     private function updateBalance($account, int $cents): void
     {
-        if ( ! $account) {
+        if (! $account) {
             return;
         }
 
-        $newBalance       = $account->balance->raw() + $cents;
+        $newBalance = $account->balance->raw() + $cents;
         $account->balance = new Money($newBalance, $account->currency);
         $account->save();
     }

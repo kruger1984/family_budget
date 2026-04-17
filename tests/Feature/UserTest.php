@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\User;
@@ -8,7 +10,6 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-
     use RefreshDatabase;
 
     public function test_it_creates_a_user_in_the_database(): void

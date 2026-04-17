@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->string('icon')->nullable();
             $table->string('color')->nullable();
             $table->foreignId('parent_id')
-                  ->nullable()
-                  ->constrained('categories')
-                  ->cascadeOnDelete();
+                ->nullable()
+                ->constrained('categories')
+                ->cascadeOnDelete();
             $table->foreignId('family_id')->nullable()->constrained()->cascadeOnDelete();
             $table->timestamps();
 

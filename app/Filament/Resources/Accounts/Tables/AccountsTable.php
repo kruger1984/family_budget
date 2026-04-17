@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Resources\Accounts\Tables;
 
 use Filament\Actions\BulkActionGroup;
@@ -15,30 +17,30 @@ class AccountsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                          ->searchable(),
+                    ->searchable(),
                 TextColumn::make('user.families.name')
-                           ->label('Семьи')
-                           ->badge()
-                           ->searchable(),
+                    ->label('Семьи')
+                    ->badge()
+                    ->searchable(),
                 TextColumn::make('user.name')
-                          ->searchable(),
+                    ->searchable(),
                 TextColumn::make('type')
-                          ->badge()
-                          ->searchable(),
+                    ->badge()
+                    ->searchable(),
                 TextColumn::make('currency')
-                          ->badge()
-                          ->searchable(),
+                    ->badge()
+                    ->searchable(),
                 TextColumn::make('balance')
-                          ->numeric()
-                          ->sortable(),
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('created_at')
-                          ->dateTime()
-                          ->sortable()
-                          ->toggleable(isToggledHiddenByDefault: true),
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                          ->dateTime()
-                          ->sortable()
-                          ->toggleable(isToggledHiddenByDefault: true),
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

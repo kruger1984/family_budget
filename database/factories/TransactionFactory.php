@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Enums\Currency;
@@ -46,7 +48,7 @@ class TransactionFactory extends Factory
 
     public function transfer(): static
     {
-        return $this->state(function (array $attributes) {
+        return $this->state(function (array $attributes): array {
             $sourceCurrency = $attributes['amount'] instanceof Money
                 ? $attributes['amount']->currency()
                 : ($attributes['currency'] ?? Currency::UAH);

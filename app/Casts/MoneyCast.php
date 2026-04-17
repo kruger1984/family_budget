@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Casts;
 
 use App\Enums\Currency;
@@ -10,9 +12,7 @@ use InvalidArgumentException;
 
 class MoneyCast implements CastsAttributes
 {
-    public function __construct(protected string $currencyField = 'currency')
-    {
-    }
+    public function __construct(protected string $currencyField = 'currency') {}
 
     public function get(Model $model, string $key, mixed $value, array $attributes): ?Money
     {
@@ -35,9 +35,7 @@ class MoneyCast implements CastsAttributes
             ];
         }
 
-        if (!$value instanceof Money) {
-            throw new InvalidArgumentException('The given value is not a Money instance.');
-        }
+        throw_unless($value instanceof Money, InvalidArgumentException::class, 'The given value is not a Money instance.');
 
         return [
             $key => $value->raw(),

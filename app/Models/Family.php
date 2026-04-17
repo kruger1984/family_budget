@@ -1,46 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\Role;
+use Barryvdh\LaravelIdeHelper\Eloquent;
 use Database\Factories\FamilyFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property string $name
  * @property int $owner_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Account> $accounts
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Collection<int, Account> $accounts
  * @property-read int|null $accounts_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $members
+ * @property-read Collection<int, User> $members
  * @property-read int|null $members_count
- * @method static \Database\Factories\FamilyFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Family newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Family newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Family query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Family whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Family whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Family whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Family whereOwnerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Family whereUpdatedAt($value)
+ * @method static FamilyFactory factory($count = null, $state = [])
+ * @method static Builder<static>|Family newModelQuery()
+ * @method static Builder<static>|Family newQuery()
+ * @method static Builder<static>|Family query()
+ * @method static Builder<static>|Family whereCreatedAt($value)
+ * @method static Builder<static>|Family whereId($value)
+ * @method static Builder<static>|Family whereName($value)
+ * @method static Builder<static>|Family whereOwnerId($value)
+ * @method static Builder<static>|Family whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @mixin Model
+ * @mixin Model
  * @mixin \Eloquent
  */
+#[Fillable([
+    'name',
+    'owner_id',
+])]
 class Family extends Model
 {
     /** @use HasFactory<FamilyFactory> */
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'owner_id',
-    ];
-
+    protected $fillable = ['id', 'name', 'owner_id'];
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withPivot('role')->withTimestamps()->withCasts([
@@ -52,5 +61,4 @@ class Family extends Model
     {
         return $this->hasMany(Account::class);
     }
-
 }

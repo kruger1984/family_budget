@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Enums\AccountType;
@@ -13,12 +15,12 @@ class AccountFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->word() . ' Account',
-            'user_id'   => User::factory(),
+            'name' => fake()->word().' Account',
+            'user_id' => User::factory(),
             'family_id' => null,
             'type' => fake()->randomElement(AccountType::cases()),
             'currency' => fake()->randomElement(Currency::cases()),
-            'balance'   => fn (array $attributes) => Money::make(0, $attributes['currency']),
+            'balance' => fn (array $attributes): Money => Money::make(0, $attributes['currency']),
         ];
     }
 }

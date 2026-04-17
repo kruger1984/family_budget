@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
 use Illuminate\Console\Attributes\Description;
@@ -25,7 +27,6 @@ class RefreshCommand extends Command
      */
     protected $description = 'Refresh';
 
-
     public function handle(): int
     {
         if (app()->isProduction()) {
@@ -34,21 +35,21 @@ class RefreshCommand extends Command
 
         Cache::flush();
 
-//        $storage = Storage::disk('images');
-//
-//        $storage->deleteDirectory('images/products');
-//        $storage->deleteDirectory('images/brands');
-
         $this->call('migrate:fresh', [
-            '--seed' => true
+            '--seed' => true,
         ]);
 
-//        $this->call('moonshine:user', [
-//            '--username' => 'add.kononov@gmail.com',
-//            '--name' => 'admin',
-//            '--password' => '123987',
-//        ]);
+        $this->info('Creating Filament user...');
 
+        $this->call('make:filament-user', [
+            '--name' => 'Admin',
+            '--email' => 'admin@example.com',
+            '--password' => 'password',
+        ]);
+
+        $this->info('name: Admin');
+        $this->info('email: admin@example.com');
+        $this->info('password: password');
 
         return self::SUCCESS;
     }

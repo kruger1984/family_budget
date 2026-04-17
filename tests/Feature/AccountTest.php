@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Enums\AccountType;
@@ -20,17 +22,17 @@ class AccountTest extends TestCase
 
         $account = Account::factory()->create([
             'family_id' => $family->id,
-            'name'      => 'Family Budget',
-            'type'      => AccountType::Cash,
-            'currency'  => Currency::USD,
+            'name' => 'Family Budget',
+            'type' => AccountType::Cash,
+            'currency' => Currency::USD,
         ]);
 
         $this->assertDatabaseHas('accounts', [
-            'id'        => $account->id,
+            'id' => $account->id,
             'family_id' => $family->id,
-            'name'      => 'Family Budget',
-            'type'      => AccountType::Cash,
-            'currency'  => Currency::USD,
+            'name' => 'Family Budget',
+            'type' => AccountType::Cash,
+            'currency' => Currency::USD,
         ]);
     }
 
@@ -39,17 +41,17 @@ class AccountTest extends TestCase
         $user = User::factory()->create();
 
         $account = Account::factory()->create([
-            'user_id'   => $user->id,
-            'name'      => 'Family Budget',
-            'type'      => AccountType::Cash,
-            'currency'  => Currency::USD,
+            'user_id' => $user->id,
+            'name' => 'Family Budget',
+            'type' => AccountType::Cash,
+            'currency' => Currency::USD,
         ]);
 
         $this->assertDatabaseHas('accounts', [
-            'id'       => $account->id,
-            'user_id'  => $user->id,
-            'name'     => 'Family Budget',
-            'type'      => AccountType::Cash,
+            'id' => $account->id,
+            'user_id' => $user->id,
+            'name' => 'Family Budget',
+            'type' => AccountType::Cash,
             'currency' => Currency::USD,
         ]);
     }
@@ -60,13 +62,12 @@ class AccountTest extends TestCase
 
         $account = Account::factory()->create([
             'family_id' => null,
-            'user_id'   => $user->id,
-            'name'      => 'Family Budget',
+            'user_id' => $user->id,
+            'name' => 'Family Budget',
         ]);
 
-
         $this->assertDatabaseHas('accounts', [
-            'id'      => $account->id,
+            'id' => $account->id,
             'balance' => 0,
         ]);
     }

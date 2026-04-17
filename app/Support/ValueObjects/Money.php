@@ -8,16 +8,15 @@ use App\Enums\Currency;
 use App\Support\Traits\Makeable;
 use Stringable;
 
-final class Money implements Stringable
+final readonly class Money implements Stringable
 {
     use Makeable;
 
     public function __construct(
-        private readonly int $value,
-        private readonly Currency $currency = Currency::UAH,
-        private readonly int $precision = 100
-    ) {
-    }
+        private int $value,
+        private Currency $currency = Currency::UAH,
+        private int $precision = 100
+    ) {}
 
     public function raw(): int
     {
@@ -41,6 +40,6 @@ final class Money implements Stringable
 
     public function __toString(): string
     {
-        return number_format($this->value(), 2, '.', ' ') . ' ' . $this->symbol();
+        return number_format($this->value(), 2, '.', ' ').' '.$this->symbol();
     }
 }
