@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Accounts\Tables;
 
+use App\Filament\Resources\Users\UserResource;
+use App\Models\Account;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -23,6 +25,8 @@ class AccountsTable
                     ->badge()
                     ->searchable(),
                 TextColumn::make('user.name')
+                    ->url(fn (Account $record): ?string => $record->user ? UserResource::getUrl('edit', ['record' => $record->user->id]
+                    ) : null)
                     ->searchable(),
                 TextColumn::make('type')
                     ->badge()

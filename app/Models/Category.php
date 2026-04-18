@@ -25,11 +25,14 @@ use InvalidArgumentException;
  * @property-read int|null $children_count
  * @property-read Family|null $family
  * @property-read Category|null $parent
+ *
  * @method static CategoryFactory factory($count = null, $state = [])
  * @method static Builder<static>|Category newModelQuery()
  * @method static Builder<static>|Category newQuery()
  * @method static Builder<static>|Category query()
+ *
  * @mixin Eloquent
+ *
  * @property int $id
  * @property string $name
  * @property string|null $icon
@@ -38,6 +41,7 @@ use InvalidArgumentException;
  * @property int|null $family_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder<static>|Category whereColor($value)
  * @method static Builder<static>|Category whereCreatedAt($value)
  * @method static Builder<static>|Category whereFamilyId($value)
@@ -46,9 +50,10 @@ use InvalidArgumentException;
  * @method static Builder<static>|Category whereName($value)
  * @method static Builder<static>|Category whereParentId($value)
  * @method static Builder<static>|Category whereUpdatedAt($value)
+ *
  * @mixin Model
  * @mixin Model
- * @mixin \Eloquent
+ * @mixin Model
  */
 #[Fillable([
     'id',

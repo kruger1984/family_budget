@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
@@ -26,6 +27,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $accounts_count
  * @property-read Collection<int, User> $members
  * @property-read int|null $members_count
+ *
  * @method static FamilyFactory factory($count = null, $state = [])
  * @method static Builder<static>|Family newModelQuery()
  * @method static Builder<static>|Family newQuery()
@@ -35,10 +37,11 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Family whereName($value)
  * @method static Builder<static>|Family whereOwnerId($value)
  * @method static Builder<static>|Family whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  * @mixin Model
  * @mixin Model
- * @mixin \Eloquent
+ * @mixin Model
  */
 #[Fillable([
     'name',
@@ -50,11 +53,17 @@ class Family extends Model
     use HasFactory;
 
     protected $fillable = ['id', 'name', 'owner_id'];
+
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class)->withPivot('role')->withTimestamps()->withCasts([
             'role' => Role::class,
         ]);
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function accounts(): HasMany

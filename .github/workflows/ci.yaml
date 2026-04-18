@@ -15,13 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    # Поднимаем MySQL специально для тестов
+
     services:
-      mysql:
+      mysql_test:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: laravel_test
+          MYSQL_ROOT_PASSWORD: fb_mysql_root
+          MYSQL_DATABASE: fb_mysql_test
+          MYSQL_USER: fb_mysql
+          MYSQL_PASSWORD: fb_mysql
         ports:
           - 3306:3306
         options: >-
@@ -64,19 +66,21 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      # Настраиваем подключение к MySQL внутри GitHub Actions
+      # Налаштовуємо базу, ідентичну до docker-compose.yml
       - name: Configure Test Database
         run: |
           sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
-          sed -i 's/DB_HOST=.*/DB_HOST=127.0.0.1/' .env
-          sed -i 's/DB_DATABASE=.*/DB_DATABASE=laravel_test/' .env
-          sed -i 's/DB_USERNAME=.*/DB_USERNAME=root/' .env
-          sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=root/' .env
+          sed -i 's/DB_DATABASE=.*/DB_DATABASE=fb_mysql_test/' .env
+          sed -i 's/DB_USERNAME=.*/DB_USERNAME=fb_mysql/' .env
+          sed -i 's/DB_PASSWORD=.*/DB_PASSWORD=fb_mysql/' .env
 
-      # Запускаем наш конвейер (Rector -> Pint -> PHPStan)
       - name: Run Linting & Static Analysis
         run: composer lint
 
-      # Запускаем тесты с покрытием
+      # ВАЖЛИВО: Перевизначаємо DB_HOST на рівні виконання команди.
+      # Це переб'є будь-які налаштування з phpunit.xml чи .env і змусить
+      # Laravel стукати на правильний хост у межах GitHub Actions.
       - name: Run Tests
+        env:
+          DB_HOST: 127.0.0.1
         run: composer coverage

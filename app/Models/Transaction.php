@@ -30,11 +30,14 @@ use Illuminate\Support\Carbon;
  * @property-read int|float $exchange_rate
  * @property-read Account|null $targetAccount
  * @property-read User|null $user
+ *
  * @method static TransactionFactory factory($count = null, $state = [])
  * @method static Builder<static>|Transaction newModelQuery()
  * @method static Builder<static>|Transaction newQuery()
  * @method static Builder<static>|Transaction query()
+ *
  * @mixin Eloquent
+ *
  * @property int $id
  * @property int $user_id
  * @property int $account_id
@@ -43,6 +46,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $description
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder<static>|Transaction whereAccountId($value)
  * @method static Builder<static>|Transaction whereAmount($value)
  * @method static Builder<static>|Transaction whereCategoryId($value)
@@ -56,9 +60,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Transaction whereType($value)
  * @method static Builder<static>|Transaction whereUpdatedAt($value)
  * @method static Builder<static>|Transaction whereUserId($value)
+ *
  * @mixin Model
  * @mixin Model
- * @mixin \Eloquent
+ * @mixin Model
  */
 #[ObservedBy(TransactionObserver::class)]
 #[Fillable([

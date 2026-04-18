@@ -23,17 +23,21 @@ use Illuminate\Support\Carbon;
  * @property Money $balance
  * @property-read Family|null $family
  * @property-read User|null $user
+ *
  * @method static AccountFactory factory($count = null, $state = [])
  * @method static Builder<static>|Account newModelQuery()
  * @method static Builder<static>|Account newQuery()
  * @method static Builder<static>|Account query()
+ *
  * @mixin Eloquent
+ *
  * @property int $id
  * @property string $name
  * @property int|null $family_id
  * @property int|null $user_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static Builder<static>|Account whereBalance($value)
  * @method static Builder<static>|Account whereCreatedAt($value)
  * @method static Builder<static>|Account whereCurrency($value)
@@ -43,9 +47,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Account whereType($value)
  * @method static Builder<static>|Account whereUpdatedAt($value)
  * @method static Builder<static>|Account whereUserId($value)
+ *
  * @mixin Model
  * @mixin Model
- * @mixin \Eloquent
+ * @mixin Model
  */
 #[Fillable([
     'id',
