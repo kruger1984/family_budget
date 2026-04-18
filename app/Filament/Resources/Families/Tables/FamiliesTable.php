@@ -25,6 +25,9 @@ class FamiliesTable
                         ? UserResource::getUrl('edit', ['record' => $record->owner_id])
                         : null)
                     ->sortable(),
+                TextColumn::make('members.name')
+                    ->label('Members')
+                    ->badge(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

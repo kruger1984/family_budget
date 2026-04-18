@@ -10,4 +10,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateFamily extends CreateRecord
 {
     protected static string $resource = FamilyResource::class;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Accounts\Tables;
 
+use App\Filament\Resources\Families\FamilyResource;
 use App\Filament\Resources\Users\UserResource;
 use App\Models\Account;
 use Filament\Actions\BulkActionGroup;
@@ -20,13 +21,22 @@ class AccountsTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('user.families.name')
-                    ->label('Семьи')
-                    ->badge()
+                TextColumn::make('family.name')
+                    ->label('Семья')
+                    ->url(
+                        fn (Account $record): ?string => $record->family ? FamilyResource::getUrl(
+                            'edit',
+                            ['record' => $record->family->id]
+                        ) : null
+                    )
                     ->searchable(),
                 TextColumn::make('user.name')
-                    ->url(fn (Account $record): ?string => $record->user ? UserResource::getUrl('edit', ['record' => $record->user->id]
-                    ) : null)
+                    ->url(
+                        fn (Account $record): ?string => $record->user ? UserResource::getUrl(
+                            'edit',
+                            ['record' => $record->user->id]
+                        ) : null
+                    )
                     ->searchable(),
                 TextColumn::make('type')
                     ->badge()
