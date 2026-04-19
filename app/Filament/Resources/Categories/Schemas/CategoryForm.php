@@ -25,7 +25,7 @@ class CategoryForm
                     ->required(),
 
                 Select::make('icon')
-                    ->label('Иконка')
+                    ->label('Icon')
                     ->allowHtml()
                     ->searchable()
                     ->options(CategoryIcons::options())
@@ -42,7 +42,7 @@ class CategoryForm
                     ->afterStateUpdated(fn (Set $set): mixed => $set('parent_id', null)),
 
                 Select::make('parent_id')
-                    ->label('Родительская категория')
+                    ->label('Parent Category')
                     ->relationship(
                         name: 'parent',
                         titleAttribute: 'name',

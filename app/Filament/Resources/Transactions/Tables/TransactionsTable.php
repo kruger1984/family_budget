@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Transactions\Tables;
 
+use App\Models\Transaction;
+use App\Support\ValueObjects\Money;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -22,24 +24,22 @@ class TransactionsTable
                     ->badge()
                     ->searchable(),
                 TextColumn::make('account.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->formatStateUsing(function (string $state, Transaction $record): string {
+                        if (! $record->account) {
+                            return $state;
+                        }
+
+                        $balance = $record->account->balance->raw() / 100;
+
+                        $currency = $record->account->currency->value ?? $record->account->currency;
+
+                        return "$state ($balance $currency)";
+                    }),
                 TextColumn::make('amount')
-                    ->numeric()
+                    ->formatStateUsing(fn ($state) => $state instanceof Money ? number_format($state->raw() / 100, 2) : $state)
                     ->sortable(),
-                TextColumn::make('currency')
-                    ->badge()
-                    ->searchable(),
-                TextColumn::make('targetAccount.name')
-                    ->searchable(),
-                TextColumn::make('target_amount')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('target_currency')
-                    ->badge()
-                    ->searchable(),
                 TextColumn::make('category.name')
-                    ->searchable(),
-                TextColumn::make('description')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -51,7 +51,6 @@ class TransactionsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
             ])
             ->recordActions([
                 EditAction::make(),

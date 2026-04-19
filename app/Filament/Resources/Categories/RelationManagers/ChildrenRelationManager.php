@@ -25,9 +25,9 @@ class ChildrenRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                TextColumn::make('name')->label('Название'),
+                TextColumn::make('name')->label('Name'),
                 ViewColumn::make('icon_and_color')
-                    ->label('Иконка')
+                    ->label('Icon')
                     ->view('filament.tables.columns.category-icon'),
             ])
             ->filters([])

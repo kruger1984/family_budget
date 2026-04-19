@@ -7,6 +7,8 @@ namespace App\Filament\Resources\Families;
 use App\Filament\Resources\Families\Pages\CreateFamily;
 use App\Filament\Resources\Families\Pages\EditFamily;
 use App\Filament\Resources\Families\Pages\ListFamilies;
+use App\Filament\Resources\Families\RelationManagers\AccountsRelationManager;
+use App\Filament\Resources\Families\RelationManagers\MembersRelationManager;
 use App\Filament\Resources\Families\Schemas\FamilyForm;
 use App\Filament\Resources\Families\Tables\FamiliesTable;
 use App\Models\Family;
@@ -37,7 +39,8 @@ class FamilyResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            MembersRelationManager::class,
+            AccountsRelationManager::class,
         ];
     }
 

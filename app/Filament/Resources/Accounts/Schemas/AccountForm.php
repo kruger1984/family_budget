@@ -9,6 +9,7 @@ use App\Enums\Currency;
 use App\Support\ValueObjects\Money;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
@@ -22,26 +23,29 @@ class AccountForm
                     ->required(),
                 Select::make('family_id')
                     ->relationship('family', 'name')
-                    ->label('Сім’я')
+                    ->label('Family')
                     ->live()
+                    ->hidden(fn ($livewire): bool => $livewire instanceof RelationManager)
+
                     ->requiredWithout('user_id')
                     ->disabled(fn (Get $get): bool => filled($get('user_id')))
                     ->prohibits('user_id')
                     ->validationMessages([
-                        'required_without' => 'Оберіть сім’ю або користувача.',
-                        'prohibits' => 'Рахунок не може належати одночасно і сім’ї, і користувачу.',
+                        'required_without' => 'Choose family or user',
+                        'prohibits' => 'An account cannot belong to both a family and a user at the same time.',
                     ]),
 
                 Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->label('Користувач')
+                    ->label('User')
                     ->live()
+                    ->hidden(fn ($livewire): bool => $livewire instanceof RelationManager)
                     ->requiredWithout('family_id')
                     ->disabled(fn (Get $get): bool => filled($get('family_id')))
                     ->prohibits('family_id')
                     ->validationMessages([
-                        'required_without' => 'Оберіть користувача або сім’ю.',
-                        'prohibits' => 'Оберіть щось одне.',
+                        'required_without' => 'Choose family or user',
+                        'prohibits' => 'Choose one thing.',
                     ]),
                 Select::make('type')
                     ->options(AccountType::class)

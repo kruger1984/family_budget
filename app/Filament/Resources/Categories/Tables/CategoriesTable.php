@@ -23,12 +23,12 @@ class CategoriesTable
             ->modifyQueryUsing(fn (Builder $query) => $query->whereNull('parent_id'))
             ->columns([
                 TextColumn::make('name')
-                    ->label('Название')
+                    ->label('Name')
                     ->formatStateUsing(fn (string $state, $record): string => $record->parent_id ? '— '.$state : $state)
                     ->sortable()
                     ->searchable(),
                 ViewColumn::make('icon_and_color')
-                    ->label('Иконка')
+                    ->label('Icon')
                     ->view('filament.tables.columns.category-icon'),
                 TextColumn::make('family.name')
                     ->url(fn (Category $record): ?string => $record->family->id
