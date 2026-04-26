@@ -64,6 +64,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  * @mixin Model
  * @mixin Model
+ * @mixin Model
  */
 #[ObservedBy(TransactionObserver::class)]
 #[Fillable([

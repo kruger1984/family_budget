@@ -42,6 +42,10 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  * @mixin Model
  * @mixin Model
+ *
+ * @property-read User $owner
+ *
+ * @mixin Model
  */
 #[Fillable([
     'name',

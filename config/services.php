@@ -37,4 +37,20 @@ return [
         ],
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => '/social-auth/google/callback',
+    ],
+
+    //    'apple' => [
+    //        'client_id' => env('APPLE_CLIENT_ID'),
+    //        'client_secret' => env('APPLE_CLIENT_SECRET'),
+    //        'key_id' => env('APPLE_KEY_ID'),
+    //        'grant_type'=> 'grant_type',
+    //        'team_id' => env('APPLE_TEAM_ID'),
+    //        'token' => env('APPLE_TOKEN'),
+    //        'redirect' => '/api/social-auth/apple/callback',
+    //    ],
+
 ];

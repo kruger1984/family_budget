@@ -51,6 +51,7 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  * @mixin Model
  * @mixin Model
+ * @mixin Model
  */
 #[Fillable([
     'id',

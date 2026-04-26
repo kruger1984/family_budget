@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\Role;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Database\Factories\UserFactory;
@@ -21,6 +20,8 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\PersonalAccessToken;
 
 /**
  * @property int $id
@@ -61,13 +62,33 @@ use Illuminate\Support\Carbon;
  * @mixin Model
  * @mixin Model
  * @mixin Model
+ *
+ * @property string|null $apple_id
+ * @property string|null $google_id
+ * @property-read Collection<int, PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
+ *
+ * @method static Builder<static>|User whereAppleId($value)
+ * @method static Builder<static>|User whereGoogleId($value)
+ *
+ * @mixin Model
  */
-#[Fillable(['name', 'email', 'password'])]
+// #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
+#[Fillable([
+    'name',
+    'email',
+    'avatar',
+    'password',
+    'remember_token',
+    'email_verified_at',
+    'google_id',
+    'apple_id',
+])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
@@ -76,6 +97,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'email_verified_at',
+        'google_id',
+        'apple_id',
     ];
 
     public function families(): BelongsToMany

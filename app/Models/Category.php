@@ -54,6 +54,7 @@ use InvalidArgumentException;
  * @mixin Model
  * @mixin Model
  * @mixin Model
+ * @mixin Model
  */
 #[Fillable([
     'id',
