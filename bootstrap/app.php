@@ -20,20 +20,32 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(fn (ValidationException $e, $request) => response()->json([
-            'success' => false,
-            'data' => null,
-            'meta' => null,
-            'message' => 'Validation failed',
-            'errors' => $e->errors(),
-        ], Response::HTTP_UNPROCESSABLE_ENTITY));
+        $exceptions->render(function (ValidationException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'data' => null,
+                    'meta' => null,
+                    'message' => 'Validation failed',
+                    'errors' => $e->errors(),
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
 
-        $exceptions->render(fn (AuthenticationException $e, $request) => response()->json([
-            'success' => false,
-            'data' => null,
-            'meta' => null,
-            'message' => 'Unauthenticated',
-            'errors' => null,
-        ], 401));
+            return null;
+        });
+
+        $exceptions->render(function (AuthenticationException $e, $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'data' => null,
+                    'meta' => null,
+                    'message' => 'Unauthenticated',
+                    'errors' => null,
+                ], Response::HTTP_UNAUTHORIZED);
+            }
+
+            return null;
+        });
 
     })->create();
