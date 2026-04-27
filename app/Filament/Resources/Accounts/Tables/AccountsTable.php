@@ -26,7 +26,7 @@ class AccountsTable
                     ->url(
                         fn (Account $record): ?string => $record->family ? FamilyResource::getUrl(
                             'edit',
-                            ['record' => $record->family->id]
+                            ['record' => $record->family->getKey()]
                         ) : null
                     )
                     ->searchable(),
@@ -34,7 +34,7 @@ class AccountsTable
                     ->url(
                         fn (Account $record): ?string => $record->user ? UserResource::getUrl(
                             'edit',
-                            ['record' => $record->user->id]
+                            ['record' => $record->user->getKey()]
                         ) : null
                     )
                     ->searchable(),

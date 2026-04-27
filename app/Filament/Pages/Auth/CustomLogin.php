@@ -8,6 +8,7 @@ use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Auth\Pages\Login;
 use Filament\Notifications\Notification;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 
 class CustomLogin extends Login
@@ -42,9 +43,10 @@ class CustomLogin extends Login
                         ->danger()
                         ->send();
 
-                    return;
+                    return null;
                 }
 
+                /** @var Authenticatable $user */
                 Auth::login($user);
 
                 return redirect()->intended(filament()->getUrl());

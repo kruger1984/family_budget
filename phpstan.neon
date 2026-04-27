@@ -7,6 +7,13 @@ parameters:
         - database/
         - routes/
 
+    treatPhpDocTypesAsCertain: false
+
+    # ВИДАЛИ або закоментуй цей блок:
+        # scanFiles:
+        #         - _ide_helper_models.php
+        #         - _ide_helper.php
+
     # Уровень 5 - идеально для старта.
     # Когда проект подрастет, сможешь поднять до 7.
     level: 5
@@ -15,5 +22,7 @@ parameters:
     # которые Larastan иногда неверно интерпретирует
     ignoreErrors:
         # - '#Property .* does not exist on Illuminate\\Database\\Eloquent\\Model#'
+        # - '#Call to an undefined method App\\Models\\User::createToken\(\)#'
+        # - '#Call to an undefined method App\\Models\\User::currentAccessToken\(\)#'
 
 

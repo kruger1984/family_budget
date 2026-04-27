@@ -21,6 +21,8 @@ class FamilyForm
                     ->relationship(name: 'members', titleAttribute: 'name')
                     ->label('Owner')
                     ->searchable()
+                    ->required()
+                    ->validationMessages(['required' => 'it`s required field'])
                     ->preload()
                     ->pivotData([
                         'role' => Role::Owner,

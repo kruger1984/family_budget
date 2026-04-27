@@ -24,7 +24,7 @@ class EditCategory extends EditRecord
 
         if ($record->parent) {
 
-            $breadcrumbs[static::getResource()::getUrl('edit', ['record' => $record->parent->id])] = $record->parent->name;
+            $breadcrumbs[static::getResource()::getUrl('edit', ['record' => $record->parent->getKey()])] = $record->parent->getAttribute('name');
         }
 
         $breadcrumbs[] = 'Редактирование';

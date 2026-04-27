@@ -31,8 +31,8 @@ class CategoriesTable
                     ->label('Icon')
                     ->view('filament.tables.columns.category-icon'),
                 TextColumn::make('family.name')
-                    ->url(fn (Category $record): ?string => $record->family->id
-                        ? FamilyResource::getUrl('edit', ['record' => $record->family->id])
+                    ->url(fn (Category $record): ?string => $record->family->getKey()
+                        ? FamilyResource::getUrl('edit', ['record' => $record->family->getKey()])
                         : null)
                     ->searchable(),
                 TextColumn::make('created_at')

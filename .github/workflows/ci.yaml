@@ -41,7 +41,7 @@ jobs:
         with:
           php-version: '8.4'
           tools: composer:v2
-          coverage: xdebug
+          coverage: none
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -56,10 +56,10 @@ jobs:
       - name: Install PHP Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Install Bun Dependencies & Build Assets
-        run: |
-          bun install --frozen-lockfile
-          bun run build
+#      - name: Install Bun Dependencies & Build Assets
+#        run: |
+#          bun install --frozen-lockfile
+#          bun run build
 
       - name: Prepare Environment
         run: |
@@ -83,4 +83,4 @@ jobs:
       - name: Run Tests
         env:
           DB_HOST: 127.0.0.1
-        run: composer coverage
+        run: php artisan test

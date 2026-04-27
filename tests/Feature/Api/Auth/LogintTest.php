@@ -104,7 +104,6 @@ it('returns validation error for social login', function (): void {
         ]);
 });
 
-
 function mockSocialUser(
     string $id = 'google-id-123',
     string $email = 'kruger@example.com'

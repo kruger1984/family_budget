@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Filament\Resources\Transactions\Tables;
 
+use App\Enums\Currency;
+use App\Models\Account;
 use App\Models\Transaction;
 use App\Support\ValueObjects\Money;
 use Filament\Actions\BulkActionGroup;
@@ -26,13 +28,20 @@ class TransactionsTable
                 TextColumn::make('account.name')
                     ->searchable()
                     ->formatStateUsing(function (string $state, Transaction $record): string {
-                        if (! $record->account) {
+                        /** @var Account|null $account */
+                        $account = $record->account;
+
+                        if (! $account) {
                             return $state;
                         }
 
-                        $balance = $record->account->balance->raw() / 100;
+                        /** @var Money $balanceObj */
+                        $balanceObj = $account->balance;
+                        $balance = $balanceObj->raw() / 100;
 
-                        $currency = $record->account->currency->value ?? $record->account->currency;
+                        /** @var Currency|string $currencyObj */
+                        $currencyObj = $account->currency;
+                        $currency = $currencyObj instanceof Currency ? $currencyObj->value : (string) $currencyObj;
 
                         return "$state ($balance $currency)";
                     }),

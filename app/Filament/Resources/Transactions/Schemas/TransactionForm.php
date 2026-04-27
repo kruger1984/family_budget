@@ -58,13 +58,19 @@ class TransactionForm
                         return '-';
                     }
 
+                    /** @var Account|null $account */
                     $account = Account::query()->find($accountId);
                     if (! $account) {
                         return '-';
                     }
 
-                    $balance = $account->balance->raw() / 100;
-                    $currency = $account->currency->value ?? $account->currency;
+                    /** @var Money $balanceObj */
+                    $balanceObj = $account->balance;
+                    $balance = $balanceObj->raw() / 100;
+
+                    /** @var Currency|string $currencyObj */
+                    $currencyObj = $account->currency;
+                    $currency = $currencyObj instanceof Currency ? $currencyObj->value : (string) $currencyObj;
 
                     return "$balance $currency";
                 }),
@@ -342,16 +348,25 @@ class TransactionForm
             return;
         }
 
+        /** @var Account|null $account */
         $account = Account::query()->find($accountId);
         if ($account) {
-            $set($currencyField, $account->currency->value ?? $account->currency);
+            /** @var Currency|string $currencyObj */
+            $currencyObj = $account->currency;
+
+            $set($currencyField, $currencyObj instanceof Currency ? $currencyObj->value : (string) $currencyObj);
         }
     }
 
     private static function formatAccountLabel(Account $record): string
     {
-        $balance = $record->balance->raw() / 100;
-        $currency = $record->currency->value ?? $record->currency;
+        /** @var Money $balanceObj */
+        $balanceObj = $record->balance;
+        $balance = $balanceObj->raw() / 100;
+
+        /** @var Currency|string $currencyObj */
+        $currencyObj = $record->currency;
+        $currency = $currencyObj instanceof Currency ? $currencyObj->value : (string) $currencyObj;
 
         return "$record->name (Balance: $balance $currency)";
     }
