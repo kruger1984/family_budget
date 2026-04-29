@@ -10,7 +10,6 @@ use App\Enums\TransactionType;
 use App\Observers\TransactionObserver;
 use App\Support\ValueObjects\Money;
 use Database\Factories\TransactionFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,22 +23,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Money|null $target_amount
  */
 #[ObservedBy(TransactionObserver::class)]
-#[Fillable([
-    'user_id',
-    'account_id',
-    'target_account_id',
-    'category_id',
-    'type',
-    'amount',
-    'currency',
-    'target_amount',
-    'target_currency',
-    'description',
-])]
+
 class Transaction extends Model
 {
     /** @use HasFactory<TransactionFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'account_id',
+        'target_account_id',
+        'category_id',
+        'type',
+        'amount',
+        'currency',
+        'target_amount',
+        'target_currency',
+        'description',
+    ];
 
     public function user(): BelongsTo
     {

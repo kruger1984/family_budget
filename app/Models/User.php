@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,27 +12,28 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable([
-    'name',
-    'email',
-    'avatar',
-    'password',
-    'remember_token',
-    'email_verified_at',
-    'google_id',
-    'apple_id',
-])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'avatar',
+        'password',
+        'remember_token',
+        'email_verified_at',
+        'google_id',
+        'apple_id',
+    ];
+
     public function families(): BelongsToMany
     {
         return $this->belongsToMany(Family::class)
-            ->using(FamilyUser::class)
-            ->withPivot('role')
-            ->withTimestamps();
+                    ->using(FamilyUser::class)
+                    ->withPivot('role')
+                    ->withTimestamps();
     }
 
     public function accounts(): HasMany
@@ -45,7 +45,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
     }
 }

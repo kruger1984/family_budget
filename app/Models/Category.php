@@ -7,25 +7,24 @@ namespace App\Models;
 use App\Exceptions\CategoryChildFamilyException;
 use App\Exceptions\CategoryNestingException;
 use Database\Factories\CategoryFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use InvalidArgumentException;
 
-#[Fillable([
-    'id',
-    'name',
-    'icon',
-    'color',
-    'parent_id',
-    'family_id',
-])]
 class Category extends Model
 {
     /** @use HasFactory<CategoryFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'icon',
+        'color',
+        'parent_id',
+        'family_id',
+    ];
 
     public function parent(): BelongsTo
     {

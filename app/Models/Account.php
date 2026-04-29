@@ -8,24 +8,23 @@ use App\Casts\MoneyCast;
 use App\Enums\AccountType;
 use App\Enums\Currency;
 use Database\Factories\AccountFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable([
-    'id',
-    'name',
-    'family_id',
-    'user_id',
-    'type',
-    'currency',
-    'balance',
-])]
 class Account extends Model
 {
     /** @use HasFactory<AccountFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'family_id',
+        'user_id',
+        'type',
+        'currency',
+        'balance',
+    ];
 
     public function user(): BelongsTo
     {
