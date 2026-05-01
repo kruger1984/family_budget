@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\FamilyController;
 use App\Http\Controllers\Api\V1\FamilyInvitationController;
@@ -31,4 +32,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
     Route::post('families/join', [FamilyInvitationController::class, 'join']);
 
     Route::delete('family-invitations/{invitation}', [FamilyInvitationController::class, 'destroy']);
+});
+
+Route::middleware(['auth:sanctum', 'family.context'])->group(function (): void {
+    Route::apiResource('accounts', AccountController::class);
 });

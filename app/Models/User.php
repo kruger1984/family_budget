@@ -31,9 +31,9 @@ class User extends Authenticatable
     public function families(): BelongsToMany
     {
         return $this->belongsToMany(Family::class)
-                    ->using(FamilyUser::class)
-                    ->withPivot('role')
-                    ->withTimestamps();
+            ->using(FamilyUser::class)
+            ->withPivot('role')
+            ->withTimestamps();
     }
 
     public function accounts(): HasMany
@@ -45,7 +45,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password'          => 'hashed',
+            'password' => 'hashed',
         ];
     }
 }

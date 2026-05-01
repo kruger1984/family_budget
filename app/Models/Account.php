@@ -7,11 +7,16 @@ namespace App\Models;
 use App\Casts\MoneyCast;
 use App\Enums\AccountType;
 use App\Enums\Currency;
+use App\Support\ValueObjects\Money;
 use Database\Factories\AccountFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property Money $balance
+ */
 class Account extends Model
 {
     /** @use HasFactory<AccountFactory> */

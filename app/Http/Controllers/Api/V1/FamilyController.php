@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\Role;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FamilyRequest;
+use App\Http\Requests\UpdateFamilyRequest;
 use App\Http\Resources\Api\FamilyResource;
 use App\Models\Family;
 use App\Support\Http\ApiResponse;
@@ -31,19 +33,15 @@ class FamilyController extends Controller
     /**
      * @throws Exception
      */
-    public function store(Request $request): JsonResponse
+    public function store(FamilyRequest $request): JsonResponse
     {
         $this->authorize('create', Family::class);
-
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-        ]);
 
         $user = $request->user();
 
         /** @var Family $family */
         $family = $user->families()->create([
-            'name' => $request->name,
+            ...$request->validated(),
             'owner_id' => $user->id,
         ], [
             'role' => Role::Owner,
@@ -69,12 +67,11 @@ class FamilyController extends Controller
         );
     }
 
-    public function update(Request $request, Family $family): JsonResponse
+    public function update(UpdateFamilyRequest $request, Family $family): JsonResponse
     {
         $this->authorize('update', $family);
-        $request->validate(['name' => ['required', 'string', 'max:255']]);
 
-        $family->update(['name' => $request->name]);
+        $family->update($request->validated());
 
         $familyWithPivot = $request->user()->families()->findOrFail($family->id);
 
