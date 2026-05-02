@@ -34,8 +34,12 @@ class TransactionPolicy
         return false;
     }
 
-    public function create(User $user, Account $account): bool
+    public function create(User $user, ?Account $account = null): bool
     {
+        if (! $account instanceof Account) {
+            return true;
+        }
+
         if (is_null($account->family_id)) {
             return $user->id === $account->user_id;
         }

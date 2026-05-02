@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Hash;
+
+use function Laravel\Prompts\password;
+use function Laravel\Prompts\text;
 
 class InstallCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'budget:install';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Installation';
+    protected $description = 'Initial installation of the application';
 
     public function handle(): int
     {
@@ -36,10 +31,20 @@ class InstallCommand extends Command
             '--panels' => true,
         ]);
 
-        $this->info('Creating Filament user...');
-        $this->call('make:filament-user');
+        $this->info('Creating Super Admin user...');
 
-        $this->info('Installation completed!');
+        $name = text('Name', default: 'Admin', required: true);
+        $email = text('Email address', required: true);
+        $password = password('Password', required: true);
+
+        User::query()->create([
+            'name' => $name,
+            'email' => $email,
+            'password' => Hash::make($password),
+            'is_admin' => true,
+        ]);
+
+        $this->info("Installation completed! You can now login with {$email}");
 
         return self::SUCCESS;
     }

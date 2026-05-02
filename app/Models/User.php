@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email_verified_at',
         'google_id',
         'apple_id',
+        'is_admin',
     ];
 
     public function families(): BelongsToMany

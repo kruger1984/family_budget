@@ -119,7 +119,7 @@ it('deletes transaction via API', function (): void {
     ]);
 
     $response = $this->actingAs($user, 'sanctum')
-        ->deleteJson("/api/transactions/{$transaction->id}");
+        ->deleteJson("/api/transactions/$transaction->id");
 
     $response->assertNoContent();
 

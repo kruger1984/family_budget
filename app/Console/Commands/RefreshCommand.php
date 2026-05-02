@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 
 #[Signature('budget:refresh')]
 #[Description('Refresh')]
@@ -39,17 +41,23 @@ class RefreshCommand extends Command
             '--seed' => true,
         ]);
 
-        $this->info('Creating Filament user...');
+        $this->info('Creating Super Admin user...');
 
-        $this->call('make:filament-user', [
-            '--name' => 'Admin',
-            '--email' => 'admin@example.com',
-            '--password' => 'password',
+        User::query()->updateOrCreate(['email' => 'admin@example.com'], [
+            'name' => 'Admin',
+            'password' => Hash::make('password'),
+            'is_admin' => true,
         ]);
 
-        $this->info('name: Admin');
-        $this->info('email: admin@example.com');
-        $this->info('password: password');
+        $this->info('Admin created successfully!');
+        $this->table(
+            ['Field', 'Value'],
+            [
+                ['Name', 'Admin'],
+                ['Email', 'admin@example.com'],
+                ['Password', 'password'],
+            ]
+        );
 
         return self::SUCCESS;
     }
