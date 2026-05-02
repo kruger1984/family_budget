@@ -8,10 +8,8 @@ use App\Http\Controllers\Api\V1\FamilyController;
 use App\Http\Controllers\Api\V1\FamilyInvitationController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\SocialAuthController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\TransactionController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/user', fn (Request $request) => $request->user())->middleware('auth:sanctum');
 
 Route::prefix('auth')->group(function (): void {
     Route::post('/social', SocialAuthController::class);
@@ -36,4 +34,13 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
 Route::middleware(['auth:sanctum', 'family.context'])->group(function (): void {
     Route::apiResource('accounts', AccountController::class);
+});
+
+Route::middleware('auth:sanctum')->group(function (): void {
+    Route::put('profile', [ProfileController::class, 'update']);
+    Route::delete('profile', [ProfileController::class, 'destroy']);
+});
+
+Route::middleware(['auth:sanctum', 'family.context'])->group(function (): void {
+    Route::apiResource('transactions', TransactionController::class);
 });
