@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\Role;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FamilyRequest;
-use App\Http\Requests\UpdateFamilyRequest;
+use App\Http\Requests\Api\FamilyRequest;
+use App\Http\Requests\Api\UpdateFamilyRequest;
 use App\Http\Resources\Api\FamilyResource;
 use App\Models\Family;
 use App\Support\Http\ApiResponse;

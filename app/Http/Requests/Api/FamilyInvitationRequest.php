@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SocialAuthRequest extends FormRequest
+class FamilyInvitationRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -16,9 +16,6 @@ class SocialAuthRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'provider' => ['required', 'in:google,apple'],
-            'token' => ['required', 'string'],
-        ];
+        return ['code' => ['required', 'string']];
     }
 }

@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\SocialAuthAction;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SocialAuthRequest;
+use App\Http\Requests\Api\SocialAuthRequest;
 use App\Http\Resources\Api\ProfileResource;
 use App\Support\Http\ApiResponse;
 use Exception;

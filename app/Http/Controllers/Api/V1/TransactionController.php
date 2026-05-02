@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\Currency;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\TransactionRequest;
+use App\Http\Requests\Api\TransactionRequest;
 use App\Http\Resources\Api\TransactionResource;
 use App\Models\Account;
 use App\Models\Transaction;

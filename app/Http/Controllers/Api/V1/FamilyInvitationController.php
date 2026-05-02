@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\Role;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FamilyInvitationRequest;
+use App\Http\Requests\Api\FamilyInvitationRequest;
 use App\Http\Resources\Api\FamilyInvitationResource;
 use App\Models\Family;
 use App\Models\FamilyInvitation;

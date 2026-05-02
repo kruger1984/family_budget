@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class FamilyRequest extends FormRequest
+class ProfileRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -17,7 +17,10 @@ class FamilyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'avatar' => ['sometimes', 'nullable', 'string'],
+            'name' => ['sometimes', 'string', 'max:255'],
+            'birthday' => ['sometimes', 'nullable', 'date', 'before:today'],
+            'timezone' => ['sometimes', 'string', 'max:10'],
         ];
     }
 }

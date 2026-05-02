@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AccountRequest;
-use App\Http\Requests\UpdateAccountRequest;
+use App\Http\Requests\Api\AccountRequest;
+use App\Http\Requests\Api\UpdateAccountRequest;
 use App\Http\Resources\Api\AccountResource;
 use App\Models\Account;
 use App\Support\Http\ApiResponse;
