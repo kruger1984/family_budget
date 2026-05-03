@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Exceptions\CategoryChildFamilyException;
 use App\Exceptions\CategoryNestingException;
 use Database\Factories\CategoryFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -69,5 +70,15 @@ class Category extends Model
                 );
             }
         });
+    }
+
+    protected function scopeDefault(Builder $query): Builder
+    {
+        return $query->whereNull('family_id');
+    }
+
+    protected function scopeForFamily(Builder $query, int $familyId): Builder
+    {
+        return $query->where('family_id', $familyId);
     }
 }

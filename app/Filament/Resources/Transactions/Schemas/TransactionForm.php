@@ -64,7 +64,6 @@ class TransactionForm
                         return '-';
                     }
 
-                    /** @var Money $balanceObj */
                     $balanceObj = $account->balance;
                     $balance = $balanceObj->raw() / 100;
 
@@ -84,8 +83,30 @@ class TransactionForm
                 ->dehydrated(),
 
             Select::make('category_id')
-                ->relationship('category', 'name')
+                ->relationship(
+                    name: 'category',
+                    titleAttribute: 'name',
+                    modifyQueryUsing: function (Builder $query, Get $get) {
+                        $userId = $get('user_id');
+
+                        return $query
+                            ->whereDoesntHave('children')
+                            ->where(function (Builder $q) use ($userId): void {
+                                $q->whereNull('family_id');
+
+                                if ($userId) {
+                                    $q->orWhereHas('family', function (Builder $f) use ($userId): void {
+                                        $f->whereHas('members', function (Builder $m) use ($userId): void {
+                                            $m->where('users.id', $userId);
+                                        });
+                                    });
+                                }
+                            });
+                    }
+                )
                 ->label('Category')
+                ->searchable()
+                ->preload()
                 ->required(),
 
             TextInput::make('description')
@@ -285,8 +306,30 @@ class TransactionForm
                 ])->visible(fn (?Transaction $record): bool => $record?->type === TransactionType::Transfer),
 
                 Select::make('category_id')
-                    ->relationship('category', 'name')
-                    ->label('Category'),
+                    ->relationship(
+                        name: 'category',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: function (Builder $query, Get $get) {
+                            $userId = $get('user_id');
+
+                            return $query
+                                ->whereDoesntHave('children')
+                                ->where(function (Builder $q) use ($userId): void {
+                                    $q->whereNull('family_id');
+
+                                    if ($userId) {
+                                        $q->orWhereHas('family', function (Builder $f) use ($userId): void {
+                                            $f->whereHas('members', function (Builder $m) use ($userId): void {
+                                                $m->where('users.id', $userId);
+                                            });
+                                        });
+                                    }
+                                });
+                        }
+                    )
+                    ->label('Category')
+                    ->searchable()
+                    ->preload(),
 
                 TextInput::make('description')
                     ->label('Details'),

@@ -9,7 +9,6 @@ use App\Models\User;
 it('allows owner to generate an invite code', function (): void {
     $user = User::factory()->create();
     $family = Family::factory()->create(['owner_id' => $user->id]);
-    $user->families()->attach($family->id, ['role' => Role::Owner]);
 
     $response = $this->actingAs($user, 'sanctum')
         ->postJson("/api/families/$family->id/invitations");

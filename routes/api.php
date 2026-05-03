@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\FamilyController;
 use App\Http\Controllers\Api\V1\FamilyInvitationController;
 use App\Http\Controllers\Api\V1\ProfileController;
@@ -43,4 +44,8 @@ Route::middleware('auth:sanctum')->group(function (): void {
 
 Route::middleware(['auth:sanctum', 'family.context'])->group(function (): void {
     Route::apiResource('transactions', TransactionController::class);
+});
+
+Route::middleware(['auth:sanctum', 'family.context'])->group(function (): void {
+    Route::apiResource('categories', CategoryController::class);
 });

@@ -6,6 +6,7 @@ namespace App\Http\Requests\Api;
 
 use App\Enums\Currency;
 use App\Enums\TransactionType;
+use App\Rules\ParentCategoryRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -16,7 +17,7 @@ class TransactionRequest extends FormRequest
         return [
             'account_id' => ['required', 'integer', 'exists:accounts,id'],
             'target_account_id' => ['nullable', 'integer', 'exists:accounts,id', 'different:account_id'],
-            'category_id' => ['nullable', 'integer', 'exists:categories,id'],
+            'category_id' => ['nullable', 'integer', 'exists:categories,id', new ParentCategoryRule],
             'type' => ['required', Rule::enum(TransactionType::class)],
             'amount' => ['required', 'integer', 'min:1'],
             'currency' => ['required', Rule::enum(Currency::class)],

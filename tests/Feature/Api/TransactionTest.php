@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\Currency;
 use App\Enums\TransactionType;
 use App\Models\Account;
+use App\Models\Category;
 use App\Models\Family;
 use App\Models\Transaction;
 use App\Models\User;
@@ -126,4 +127,29 @@ it('deletes transaction via API', function (): void {
     $this->assertDatabaseMissing('transactions', [
         'id' => $transaction->id,
     ]);
+});
+
+it('cannot create a transaction with a parent category', function (): void {
+    $user = User::factory()->create();
+    $account = Account::factory()->create(['user_id' => $user->id]);
+    $family = Family::factory()->create(['owner_id' => $user->id]);
+
+    $parentCategory = Category::factory()->create([
+        'name' => 'Parent',
+    ]);
+
+    Category::factory()->create(['name' => 'Child', 'parent_id' => $parentCategory->id]);
+
+    $response = $this->actingAs($user, 'sanctum')
+        ->withHeader('X-Family-Id', (string) $family->id)
+        ->postJson('/api/transactions', [
+            'account_id' => $account->id,
+            'category_id' => $parentCategory->id,
+            'amount' => 1000,
+            'currency' => Currency::UAH->value,
+            'type' => TransactionType::Expense->value,
+        ]);
+
+    $response->assertStatus(422)
+        ->assertJsonValidationErrors(['category_id']);
 });

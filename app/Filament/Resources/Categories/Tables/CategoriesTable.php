@@ -6,6 +6,7 @@ namespace App\Filament\Resources\Categories\Tables;
 
 use App\Filament\Resources\Families\FamilyResource;
 use App\Models\Category;
+use App\Models\Family;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -31,9 +32,24 @@ class CategoriesTable
                     ->label('Icon')
                     ->view('filament.tables.columns.category-icon'),
                 TextColumn::make('family.name')
-                    ->url(fn (Category $record): ?string => $record->family->getKey()
-                        ? FamilyResource::getUrl('edit', ['record' => $record->family->getKey()])
-                        : null)
+                    ->label('Owner')
+                    ->state(function (Category $record): string {
+                        /** @var Family|null $family */
+                        $family = $record->family;
+
+                        return $family->name ?? 'System';
+                    })
+                    ->badge()
+                    ->color(fn (string $state): string => $state === 'System' ? 'gray' : 'info')
+                    ->icon(fn (string $state): string => $state === 'System' ? 'heroicon-m-cpu-chip' : 'heroicon-m-users')
+                    ->url(function (Category $record): ?string {
+                        /** @var Family|null $family */
+                        $family = $record->family;
+
+                        return $family
+                            ? FamilyResource::getUrl('edit', ['record' => $family->getKey()])
+                            : null;
+                    })
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

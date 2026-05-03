@@ -11,7 +11,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -35,11 +34,8 @@ class CategoryForm
 
                 Select::make('family_id')
                     ->relationship('family', 'name')
-                    ->hidden(fn ($livewire): bool => $livewire instanceof RelationManager)
                     ->disabled(fn (string $operation, $record): bool => $operation === 'edit' && $record && $record->parent_id === null)
-                    ->dehydrated(fn ($livewire): bool => ! ($livewire instanceof RelationManager))
-                    ->live()
-                    ->afterStateUpdated(fn (Set $set): mixed => $set('parent_id', null)),
+                    ->live(),
 
                 Select::make('parent_id')
                     ->label('Parent Category')

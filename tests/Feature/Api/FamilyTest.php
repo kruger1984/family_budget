@@ -110,7 +110,9 @@ it('cannot view a family the user does not belong to (Isolation)', function (): 
 
 it('can view its own family details (Contract)', function (): void {
     $user = User::factory()->create();
-    $family = Family::factory()->create(['name' => 'Моя улюблена сім\'я']);
+    $family = Family::factory()->create([
+        'name' => 'Моя улюблена сім\'я',
+    ]);
     $user->families()->attach($family->id, ['role' => Role::Owner]);
 
     $response = $this->actingAs($user, 'sanctum')
@@ -148,8 +150,6 @@ it('allows owner to update the family name (Logic)', function (): void {
         'owner_id' => $user->id,
     ]);
 
-    $user->families()->attach($family->id, ['role' => Role::Owner]);
-
     $response = $this->actingAs($user, 'sanctum')
         ->putJson("/api/families/$family->id", [
             'name' => 'Нова супер назва',
@@ -181,8 +181,6 @@ it('allows owner to delete the family and cleans up records (Logic)', function (
     $family = Family::factory()->create([
         'owner_id' => $user->id,
     ]);
-
-    $user->families()->attach($family->id, ['role' => Role::Owner]);
 
     $response = $this->actingAs($user, 'sanctum')
         ->deleteJson("/api/families/$family->id");

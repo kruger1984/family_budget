@@ -69,7 +69,6 @@ it('only family owner can create family account', function (): void {
         ['owner_id' => $owner->id]
     );
 
-    $owner->families()->attach($family->id, ['role' => Role::Owner]);
     $member->families()->attach($family->id, ['role' => Role::Member]);
 
     // ❌ 2. member пробує створити (має бути заборонено)
@@ -136,7 +135,6 @@ it('member cannot update family accounts created by owner', function (): void {
     $member = User::factory()->create();
     $family = Family::factory()->create(['owner_id' => $owner->id]);
 
-    $owner->families()->attach($family->id, ['role' => Role::Owner]);
     $member->families()->attach($family->id, ['role' => Role::Member]);
 
     $account = Account::factory()->create([
