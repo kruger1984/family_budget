@@ -6,35 +6,55 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\Currency;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\GetTransactionsRequest;
 use App\Http\Requests\Api\TransactionRequest;
 use App\Http\Resources\Api\TransactionResource;
 use App\Models\Account;
 use App\Models\Transaction;
+use App\QueryFilters\Category;
+use App\QueryFilters\DateRange;
+use App\QueryFilters\Sort;
+use App\QueryFilters\Type;
 use App\Support\Http\ApiResponse;
 use App\Support\ValueObjects\Money;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Pipeline\Pipeline;
 use Symfony\Component\HttpFoundation\Response;
 
 class TransactionController extends Controller
 {
     use AuthorizesRequests;
 
-    public function index(Request $request): JsonResponse
+    public function index(GetTransactionsRequest $request): JsonResponse
     {
         $user = $request->user();
         $activeFamily = $request->attributes->get('active_family');
 
-        $transactions = Transaction::query()->whereHas('account', function ($query) use ($user, $activeFamily): void {
-            $query->where('user_id', $user->id)
-                ->whereNull('family_id');
-            if ($activeFamily) {
-                $query->orWhere('family_id', $activeFamily->id);
-            }
-        })->latest()->paginate(20);
+        $query = Transaction::query()->whereHas('account', function ($query) use ($user, $activeFamily): void {
+            $query->where(function ($q) use ($user, $activeFamily): void {
+                $q->where('user_id', $user->id)
+                    ->whereNull('family_id');
 
-        return ApiResponse::success(
+                if ($activeFamily) {
+                    $q->orWhere('family_id', $activeFamily->id);
+                }
+            });
+        });
+
+        $transactions = resolve(Pipeline::class)
+            ->send($query)
+            ->through([
+                Category::class,
+                Type::class,
+                DateRange::class,
+                Sort::class,
+            ])
+            ->thenReturn()
+            ->paginate($request->integer('limit', 20));
+
+        return ApiResponse::paginate(
+            paginator: $transactions,
             data: TransactionResource::collection($transactions)->resolve(),
         );
     }
