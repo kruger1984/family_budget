@@ -49,6 +49,8 @@ class FamilyController extends Controller
 
         $family = $user->families()->find($family->id);
 
+        $family->load(['owner', 'members']);
+
         return ApiResponse::success(
             data: FamilyResource::make($family),
             message: 'Family created successfully',

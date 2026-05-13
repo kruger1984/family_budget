@@ -72,7 +72,7 @@ it('requires a name to create a family (Validation)', function (): void {
 });
 
 it('can create a family and automatically assigns owner role (Logic & Contract)', function (): void {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['name' => 'Олександр']);
 
     $response = $this->actingAs($user, 'sanctum')
         ->postJson('/api/families', [
@@ -82,7 +82,27 @@ it('can create a family and automatically assigns owner role (Logic & Contract)'
     $response->assertStatus(201)
         ->assertJsonPath('success', true)
         ->assertJsonPath('data.name', 'Родина Коваленків')
-        ->assertJsonPath('data.role', Role::Owner->value);
+        ->assertJsonPath('data.role', Role::Owner->value)
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'role',
+                'owner' => [
+                    'id',
+                    'name',
+                    'email',
+                ],
+                'users' => [
+                    0 => [
+                        'id',
+                        'name',
+                        'email',
+                    ],
+                ],
+            ],
+        ])->assertJsonPath('data.owner.id', $user->id)
+        ->assertJsonPath('data.owner.name', 'Олександр');
 
     $familyId = $response->json('data.id');
 

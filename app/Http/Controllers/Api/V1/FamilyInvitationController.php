@@ -8,6 +8,7 @@ use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FamilyInvitationRequest;
 use App\Http\Resources\Api\FamilyInvitationResource;
+use App\Http\Resources\Api\FamilyResource;
 use App\Models\Family;
 use App\Models\FamilyInvitation;
 use App\Support\Http\ApiResponse;
@@ -49,17 +50,24 @@ class FamilyInvitationController extends Controller
 
         $user = $request->user();
 
-        if ($user->families()->where('family_id', $invitation->family_id)->exists()) {
+        /** @var Family $family */
+        $family = $invitation->family;
+
+        if ($user->families()->where('family_id', $family->id)->exists()) {
             return ApiResponse::error('You are already a member of this family', 422);
         }
 
-        $user->families()->attach($invitation->family_id, [
+        $user->families()->attach($family->id, [
             'role' => Role::Member,
         ]);
 
         $invitation->delete();
 
-        return ApiResponse::success(message: 'Joined family successfully');
+        $joinedFamily = $user->families()
+            ->with(['owner', 'members'])
+            ->findOrFail($family->id);
+
+        return ApiResponse::success(data: FamilyResource::make($joinedFamily), message: 'Joined family successfully');
     }
 
     public function destroy(FamilyInvitation $invitation): JsonResponse

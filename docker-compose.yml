@@ -6,6 +6,7 @@ services:
         environment:
           - XDEBUG_MODE=off
           - COMPOSER_HOME=/var/www/.composer
+          - XDG_CONFIG_HOME=/tmp
         container_name: fb_app
         working_dir: /var/www
         volumes:
