@@ -45,6 +45,18 @@ it('returns a list of user families with their roles', function (): void {
                     'id',
                     'name',
                     'role',
+                    'owner' => [
+                        'id',
+                        'name',
+                        'email',
+                    ],
+                    'users' => [
+                        0 => [
+                            'id',
+                            'name',
+                            'email',
+                        ],
+                    ],
                 ],
             ],
             'meta',
@@ -139,6 +151,25 @@ it('can view its own family details (Contract)', function (): void {
         ->getJson("/api/families/$family->id");
 
     $response->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'role',
+                'owner' => [
+                    'id',
+                    'name',
+                    'email',
+                ],
+                'users' => [
+                    0 => [
+                        'id',
+                        'name',
+                        'email',
+                    ],
+                ],
+            ],
+        ])
         ->assertJsonPath('data.name', 'Моя улюблена сім\'я')
         ->assertJsonPath('data.role', Role::Owner->value);
 });

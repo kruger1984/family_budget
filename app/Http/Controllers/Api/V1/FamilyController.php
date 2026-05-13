@@ -23,7 +23,9 @@ class FamilyController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $families = $request->user()->families;
+        $families = $request->user()->families()
+            ->with(['owner', 'members'])
+            ->get();
 
         return ApiResponse::success(
             data: FamilyResource::collection($families),
@@ -64,6 +66,8 @@ class FamilyController extends Controller
 
         $familyWithPivot = $request->user()->families()->findOrFail($family->id);
 
+        $familyWithPivot->load(['owner', 'members']);
+
         return ApiResponse::success(
             data: FamilyResource::make($familyWithPivot)
         );
@@ -76,6 +80,8 @@ class FamilyController extends Controller
         $family->update($request->validated());
 
         $familyWithPivot = $request->user()->families()->findOrFail($family->id);
+
+        $familyWithPivot->load(['owner', 'members']);
 
         return ApiResponse::success(
             data: FamilyResource::make($familyWithPivot),
